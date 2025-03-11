@@ -94,3 +94,28 @@ interface TaxInput {
     }    
   
   }
+
+
+  document.getElementById('taxForm')?.addEventListener('submit', (event)=> {
+    event.preventDefault();
+    const income = Number((document.getElementById('income')).value);
+    const year = Number((document.getElementById('year')).value);
+    const input: TaxInput = { income, year};
+  
+    try {
+      const result: TaxResult = calculateTax(input);
+      const resultDiv = document.getElementById('result');
+      if (resultDiv) {
+        resultDiv.innerHTML = `
+        <h2>ergebnis</h2>
+        <p> versteuerndes Einkommen (zvE) ${result.zvE} </p>
+        <p> einkommensteuer zu zahlen ${result.tax} </p>
+        <p> steuerfall ist ${result.taxBracket}</p>
+        `;
+      }
+    } catch (error) {
+      alert(`fehler - ${(error).message}`);
+    };
+  
+  });
+  
