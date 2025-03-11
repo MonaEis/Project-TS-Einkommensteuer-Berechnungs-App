@@ -1,4 +1,9 @@
-//- 
+const incomeUserInput = document.querySelector("#income");
+const yearUserInput = document.querySelector("#year");
+const submitButton = document.querySelector("button");
+const taxOutput = document.querySelector("#result");
+
+
 interface TaxInput {
     income: number;
     year: number;
