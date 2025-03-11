@@ -98,27 +98,63 @@ function calculateTax(input: TaxInput): TaxResult {
 document.getElementById('taxForm')?.addEventListener('submit', (event) => {
   event.preventDefault();
 
-  const income = Number((document.getElementById('income')).value);
-  const year = Number((document.getElementById('year')).value);
+  // Einkommens- und Jahreswerte abrufen und umwandeln
+  const income = Number((document.getElementById('income') as HTMLInputElement)?.value);
+  const year = Number((document.getElementById('year') as HTMLInputElement)?.value);
+
+  // Typdefinition für TaxInput sicherstellen
+  interface TaxInput {
+    income: number;
+    year: number;
+  }
 
   const input: TaxInput = { income, year };
 
+  // Steuerberechnung durchführen
   const result = calculateTax(input); 
   const resultDiv = document.getElementById('result');
 
   if (result && resultDiv) {
     resultDiv.innerHTML = `
       <h2>⚠️ Dein ESt ist folgend: ⚠️</h2>
-      <p>🀙 zvE <h3>${result.zvE} € </h3></p>
-      <p>🀚 steuer - von der Regierung auszurauben! <h3>${result.tax} € 🤬</h3></p>
-      <p>🀛 Dein steuerfall <h3>${result.taxBracket}</h3></p>
+      <p>🀙 zvE: <strong>${result.zvE} €</strong></p>
+      <p>🀚 Steuer - von der Regierung auszurauben!: <strong>${result.tax} € 🤬</strong></p>
+      <p>🀛 Dein Steuerfall: <strong>${result.taxBracket}</strong></p>
     `;
   } else {
-
     if (resultDiv) {
-      resultDiv.innerHTML = `<p style="color: red;"> error!  ${year} nicht verfügar! </p>`;
+      resultDiv.innerHTML = `<p style="color: red;">Fehler! ${year} ist nicht verfügbar!</p>`;
     }
   }
+});
+
+
+
+
+// document.getElementById('taxForm')?.addEventListener('submit', (event) => {
+//   event.preventDefault();
+
+//   const income = Number((document.getElementById('income')).value);
+//   const year = Number((document.getElementById('year')).value);
+
+//   const input: TaxInput = { income, year };
+
+//   const result = calculateTax(input); 
+//   const resultDiv = document.getElementById('result');
+
+//   if (result && resultDiv) {
+//     resultDiv.innerHTML = `
+//       <h2>⚠️ Dein ESt ist folgend: ⚠️</h2>
+//       <p>🀙 zvE <h3>${result.zvE} € </h3></p>
+//       <p>🀚 steuer - von der Regierung auszurauben! <h3>${result.tax} € 🤬</h3></p>
+//       <p>🀛 Dein steuerfall <h3>${result.taxBracket}</h3></p>
+//     `;
+//   } else {
+
+//     if (resultDiv) {
+//       resultDiv.innerHTML = `<p style="color: red;"> error!  ${year} nicht verfügar! </p>`;
+//     }
+//   }
 
 // document.getElementById('taxForm')?.addEventListener('submit', (event)=> {
 //   event.preventDefault();
@@ -141,4 +177,4 @@ document.getElementById('taxForm')?.addEventListener('submit', (event) => {
 //     alert(`fehler - ${(error).message}`);
 //   };
 
-});
+// });
