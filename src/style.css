@@ -9,6 +9,9 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --gold: goldenrod;
+  --dark-gold: #8b6914;
+  --light-gold: #daa520;
 }
 
 body {
@@ -23,6 +26,8 @@ body {
   border: 0px solid black;
   border-radius: 20px;
   box-shadow: 0px 0px 10px rgba(181, 181, 181, 0.5);
+  background: linear-gradient(160deg, var(--gold), var(--dark-gold));
+  animation: bodyFadeIn 1s ease-out;
 }
 
 .head {
@@ -46,21 +51,6 @@ label {
   margin: 10px 0 5px;
 }
 
-input,
-select,
-button {
-  padding: 5px;
-  width: 100%;
-  margin-bottom: 10px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  color: #333;
-  transition: border-color 0.3s ease;
-  width: 30%;
-}
-
 #result {
   margin-top: 20px;
 }
@@ -70,8 +60,165 @@ button {
   color: #fff;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 40%;
+  box-sizing: border-box;
+}
+
+input,
+select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 button:hover {
   background-color: rgb(165, 125, 24);
+}
+
+@keyframes bodyFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.head {
+  /* ... bestehende head Eigenschaften ... */
+  animation: headScale 1s ease-out, imageTilt 20s infinite linear;
+}
+
+@keyframes headScale {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes imageTilt {
+  0%,
+  100% {
+    transform: rotate(0.5deg);
+  }
+  50% {
+    transform: rotate(-0.5deg);
+  }
+}
+
+.container {
+  animation: slideUp 0.8s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+input,
+select,
+button {
+  transition: all 0.3s ease;
+  width: 30%; /* Etwas breiter gemacht */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: 5px 0;
+  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  margin-right: 20px;
+}
+
+input:hover,
+select:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--light-gold);
+  box-shadow: 0 0 10px var(--light-gold);
+}
+
+button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 20px rgba(218, 165, 32, 0.4);
+}
+
+button::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(45deg);
+  transition: all 0.5s;
+}
+
+button:hover::after {
+  left: 120%;
+}
+
+#result {
+  animation: fadeIn 0.6s ease-out forwards;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid var(--light-gold);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Pulsierende Animation für wichtige Elemente */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.highlight {
+  animation: pulse 1.5s infinite;
 }
