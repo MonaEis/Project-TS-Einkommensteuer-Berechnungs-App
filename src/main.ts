@@ -98,4 +98,71 @@ function calculateTax(input: TaxInput): TaxResult {
     tax: Math.round(tax),
     taxBracket,
   };
+
+  
+  function calculateZvE(input: TaxInput): number {
+    const constants = taxConstants [input.year];
+    if(!constants) throw new Error(`Jahr ${input.year} ist nicht verfügbar`);
+    return Math.max (0, input.income - constants.grundfreibetrag);
+  }
+  
+  function calculateTax(input: TaxInput): TaxResult {
+    const constants = taxConstants [input.year];
+    if(!constants) throw new Error(`Jahr ${input.year} ist nicht verfügbar`);
+  
+    const zvE = calculateZvE(input);
+    let tax = 0;
+    let taxBracket = '';
+  
+    if (zvE <= 0) {
+      taxBracket = 'Fall 1 - Unterhalb Grundfreibetrag';
+    } else if ( zvE <= constants.grenze2 - constants.grundfreibetrag) {
+      const y = (zvE - (constants.grenze1 - constants.grundfreibetrag)) / 10000;
+      tax = (1088.67 * y + 1400) * y;
+      taxBracket = 'fall 2 - basicsteuersatz';
+    } else if ( zvE <= constants.grenze3 - constants.grundfreibetrag) {
+      const z = (zvE - (constants.grenze2 - constants.grundfreibetrag)) / 10000;
+      tax = (206.43 * z + 1400) * z + 869.32;
+      taxBracket = 'fall 3 - zwischen Basic u. spitzensteuersatz';
+    } else if ( zvE <= constants.grenze4 - constants.grundfreibetrag) {
+      tax = 0.42 * zvE - 9336.45;
+      taxBracket = 'fall 4 - spitzensteuersatz';
+    } else {
+      tax = 0.45 * zvE - 17671.20;
+      taxBracket = 'fall 5 - höchststeuersatz';
+    }
+    return {
+      zvE: Math.round(zvE),
+      tax: Math.round(tax),
+      taxBracket,
+    }    
+  
+  }
+
+
+  document.getElementById('taxForm')?.addEventListener('submit', (event)=> {
+    event.preventDefault();
+    const income = Number((document.getElementById('income')).value);
+    const year = Number((document.getElementById('year')).value);
+    const input: TaxInput = { income, year};
+  
+    try {
+      const result: TaxResult = calculateTax(input);
+      const resultDiv = document.getElementById('result');
+      if (resultDiv) {
+        resultDiv.innerHTML = `
+        <h2>ergebnis</h2>
+        <p> versteuerndes Einkommen (zvE) ${result.zvE} </p>
+        <p> einkommensteuer zu zahlen ${result.tax} </p>
+        <p> steuerfall ist ${result.taxBracket}</p>
+        `;
+      }
+    } catch (error) {
+      alert(`fehler - ${(error).message}`);
+    };
+  
+  });
+  
+
 }
+
